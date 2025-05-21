@@ -1,2 +1,2 @@
 # handson
-handon demo sources
+hands on demo sources
