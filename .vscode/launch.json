@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "TemperaturemonitorApplication",
+            "request": "launch",
+            "mainClass": "com.gtm.demo.temperaturemonitor.TemperaturemonitorApplication",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-TemperaturemonitorApplication<temperaturemonitor>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.gtm.demo.temperaturemonitor.TemperaturemonitorApplication",
+            "projectName": "temperaturemonitor",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
