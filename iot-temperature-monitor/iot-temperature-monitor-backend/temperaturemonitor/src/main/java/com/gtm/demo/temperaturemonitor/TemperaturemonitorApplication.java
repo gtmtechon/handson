@@ -12,3 +12,20 @@ public class TemperaturemonitorApplication {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -3,42 +3,65 @@ package com.gtm.demo.temperaturemonitor.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gtm.demo.temperaturemonitor.service.TemperatureService;
 import com.gtm.demo.temperaturemonitor.entity.TemperatureReading;
 
+
 @RestController
 @RequestMapping("/api/temperatures")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // Vue 개발 서버 포트에 맞게 수정
 public class TemperatureController {
-    @Autowired
-    private TemperatureService temperatureService;
 
-    // IoT 장비에서 온도 데이터를 전송받는 엔드포인트
+    private final TemperatureService temperatureService;
+    private static final Logger logger = LoggerFactory.getLogger(DeviceController.class);
+
+
+    // TemperatureService를 주입받음
+    public TemperatureController(TemperatureService temperatureService) {
+        this.temperatureService = temperatureService;
+    }
+
     @PostMapping("/reading")
-    public ResponseEntity<TemperatureReading> recordTemperature(@RequestBody TemperatureReading reading) {
-        return new ResponseEntity<>(temperatureService.saveTemperatureReading(reading), HttpStatus.CREATED);
+    public ResponseEntity<TemperatureReading> addTemperatureReading(@RequestBody TemperatureReading reading) {
+        TemperatureReading savedReading = temperatureService.saveTemperatureReading(reading);
+        return new ResponseEntity<>(savedReading, HttpStatus.CREATED);
     }
 
     @GetMapping("/device/{deviceId}/recent")
-    public ResponseEntity<List<TemperatureReading>> getRecentTemperatures(@PathVariable String deviceId, @RequestParam(defaultValue = "100") int limit) {
-        return ResponseEntity.ok(temperatureService.getRecentTemperatures(deviceId, limit));
+    public ResponseEntity<List<TemperatureReading>> getRecentTemperaturesByDeviceId(
+            @PathVariable String deviceId,
+            @RequestParam(defaultValue = "60") int limit) { // limit은 분(minutes) 단위로 받습니다.
+        logger.info("Fetching recent temperature readings for deviceId: {} with limit: {}", deviceId, limit);
+        List<TemperatureReading> readings = temperatureService.getRecentReadingsByDeviceId(deviceId, limit);
+        return ResponseEntity.ok(readings);
     }
 
-    @GetMapping("/device/{deviceId}/range")
-    public ResponseEntity<List<TemperatureReading>> getTemperaturesByRange(@PathVariable String deviceId,
-                                                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-                                                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        return ResponseEntity.ok(temperatureService.getTemperaturesByTimeRange(deviceId, start, end));
+    @GetMapping("/device/{deviceId}/all")
+    public ResponseEntity<List<TemperatureReading>> getAllTemperaturesByDeviceId(@PathVariable String deviceId) {
+        List<TemperatureReading> readings = temperatureService.getAllReadingsByDeviceId(deviceId);
+        return ResponseEntity.ok(readings);
     }
+
+    @GetMapping("/{readingId}")
+    public ResponseEntity<TemperatureReading> getTemperatureReadingById(@PathVariable Long readingId) {
+        return temperatureService.getReadingById(readingId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }

@@ -20,6 +20,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'DeviceForm',
   props: {
@@ -35,32 +36,29 @@ export default {
       type: Boolean,
       default: false,
     },
-    isSubmitting: {
+    isSubmitting: { // 새로 추가된 prop
       type: Boolean,
       default: false,
     },
   },
   data() {
     return {
-      // initialDevice prop을 받아와 device 데이터 초기화
-      // watch 옵션을 사용하여 initialDevice 변경 시 device 업데이트
-      device: { ...this.initialDevice },
+      device: { ...this.initialDevice }, // props를 직접 수정하지 않기 위해 복사
     };
   },
   watch: {
     initialDevice: {
       handler(newVal) {
-        // prop이 변경될 때마다 내부 device 상태 업데이트
         this.device = { ...newVal };
       },
       deep: true,
-      immediate: true, // 컴포넌트 마운트 시 즉시 실행하여 초기값 설정
+      immediate: true,
     },
   },
   methods: {
     handleSubmit() {
-      if (!this.isSubmitting) {
-        this.$emit('submit', this.device); // 부모 컴포넌트로 현재 device 상태 emit
+      if (!this.isSubmitting) { // 제출 중이 아닐 때만 emit
+        this.$emit('submit', this.device); // 부모 컴포넌트로 데이터 emit
       }
     },
   },
@@ -104,8 +102,8 @@ input[type="text"]:focus {
 }
 
 input[readonly] {
-  background-color: #e9ecef; /* 읽기 전용 필드의 배경색 변경 */
-  cursor: not-allowed; /* 마우스 커서 변경 */
+  background-color: #e9ecef;
+  cursor: not-allowed;
 }
 
 .button {
@@ -125,7 +123,7 @@ input[readonly] {
   color: white;
 }
 
-.button.primary:hover:not(:disabled) {
+.button.primary:hover:not(:disabled) { /* disabled 상태에서는 hover 효과 없음 */
   background-color: #0056b3;
 }
 
@@ -144,8 +142,8 @@ input[readonly] {
   opacity: 0.7;
 }
 
-.disabled-link {
-  pointer-events: none;
+.disabled-link { /* router-link에 대한 비활성화 스타일 */
+  pointer-events: none; /* 클릭 이벤트 비활성화 */
   opacity: 0.7;
   cursor: not-allowed;
 }
