@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_webapp_fe_name": {
+            "value": null
+        },
+        "components_webapp_fe_name": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_c40ed92f_a745_4ad8_ba89_cfe39134ad4e_SE_externalid": {
+            "value": null
+        },
+        "serverfarms_asp_Simpleweb01_externalid": {
+            "value": null
+        }
+    }
+}
