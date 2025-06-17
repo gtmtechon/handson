@@ -21,7 +21,7 @@ import com.gtm.demo.temperaturemonitor.entity.TemperatureReading;
 
 @RestController
 @RequestMapping("/api/temperatures")
-@CrossOrigin(origins = "*", allowCredentials = "true") // Vue 개발 서버 포트에 맞게 수정
+@CrossOrigin(origins ={"http://localhost:3000", "https://*.azurewebsites.net"})
 public class TemperatureController {
 
     private final TemperatureService temperatureService;
