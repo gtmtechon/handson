@@ -16,7 +16,7 @@ import com.gtm.demo.temperaturemonitor.service.DeviceService;
 @RestController
 @RequestMapping("/api/devices") // 이 컨트롤러의 기본 경로
 //@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // 프론트엔드 포트에 맞게 수정해야 함
-@CrossOrigin(origins = {"https://iotmonweb.koreacentral.cloudapp.azure.com", "http://localhost:3000", "https://iotdevicemonitor-h6h8bpepcme4dee2.koreacentral-01.azurewebsites.net"},allowCredentials = "true")
+//@CrossOrigin(origins = {"https://iotmonweb.koreacentral.cloudapp.azure.com", "http://localhost:3000", "https://iotdevicemonitor-h6h8bpepcme4dee2.koreacentral-01.azurewebsites.net"},allowCredentials = "true")
 public class DeviceController {
     private final DeviceService deviceService;
     private static final Logger logger = LoggerFactory.getLogger(DeviceController.class);
