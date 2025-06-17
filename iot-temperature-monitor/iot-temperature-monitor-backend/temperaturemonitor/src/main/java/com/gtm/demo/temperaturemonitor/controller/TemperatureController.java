@@ -21,7 +21,7 @@ import com.gtm.demo.temperaturemonitor.entity.TemperatureReading;
 
 @RestController
 @RequestMapping("/api/temperatures")
-@CrossOrigin(origins ={"http://localhost:3000", "https://*.azurewebsites.net"})
+@CrossOrigin(origins = "*")
 public class TemperatureController {
 
     private final TemperatureService temperatureService;
