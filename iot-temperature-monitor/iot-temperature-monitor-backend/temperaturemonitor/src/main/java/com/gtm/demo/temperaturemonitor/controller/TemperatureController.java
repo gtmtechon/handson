@@ -1,12 +1,9 @@
 package com.gtm.demo.temperaturemonitor.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +21,7 @@ import com.gtm.demo.temperaturemonitor.entity.TemperatureReading;
 
 @RestController
 @RequestMapping("/api/temperatures")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // Vue 개발 서버 포트에 맞게 수정
+@CrossOrigin(origins = "*", allowCredentials = "true") // Vue 개발 서버 포트에 맞게 수정
 public class TemperatureController {
 
     private final TemperatureService temperatureService;
