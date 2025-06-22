@@ -1,0 +1,29 @@
+ftp put application.jar to ~/site/wwwroot
+or
+------------
+az webapp deployment source config-zip \
+  --resource-group MySpringBootMavenAppResourceGroupPortal \
+  --name my-springboot-portal-app-unique-name \
+  --src "my-springboot-app-0.0.1-SNAPSHOT.jar" # 빌드된 JAR 파일 이름
+
+
+az webapp config appsettings set \
+  --name my-springboot-maven-app-unique-name \
+  --resource-group MySpringBootMavenAppResourceGroup \
+  --settings DB_URL="jdbc:postgresql://<your-db-server>.postgres.database.azure.com:5432/<your-db-name>?sslmode=require" \
+            DB_USERNAME="<your-db-username>" \
+            DB_PASSWORD="<your-db-password>"
+
+# 데이터베이스 연결 정보 - 환경 변수에서 가져옴
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+
+export PGHOST=gtmhansondb.postgres.database.azure.com
+export PGUSER=iotman
+export PGPORT=5432
+export PGDATABASE=postgres
+export PGPASSWORD="{your-password}" 
+
+jdbc:postgresql://gtmhansondb.postgres.database.azure.com:5432/postgres?user=iotman&password={your_password}&sslmode=require
