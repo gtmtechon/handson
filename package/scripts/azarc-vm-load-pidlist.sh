@@ -1,5 +1,5 @@
 #!/bin/bash
-$date=$(date +%Y%m%d-%H%M%S)
+date=$(date +%Y%m%d-%H%M%S)
 ps -ef | grep -v grep >> /tmp/pidlist-$date.txt
 exit 0
 # 이 스크립트는 현재 실행 중인 프로세스의 PID 목록을 /tmp 디렉토리에
