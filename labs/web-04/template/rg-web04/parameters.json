@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_web04fd_name": {
+            "value": null
+        },
+        "profiles_fdweb04_name": {
+            "value": null
+        },
+        "serverfarms_asp_web04_name": {
+            "value": null
+        },
+        "components_web04fd_name": {
+            "value": null
+        },
+        "storageAccounts_staweb04fdoor_name": {
+            "value": null
+        },
+        "userAssignedIdentities_web04fd_id_ac0b_name": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_c40ed92f_a745_4ad8_ba89_cfe39134ad4e_SE_externalid": {
+            "value": null
+        }
+    }
+}

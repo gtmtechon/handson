@@ -1,0 +1,176 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "profiles_fdweb04_name": {
+            "defaultValue": "fdweb04",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Cdn/profiles",
+            "apiVersion": "2025-04-15",
+            "name": "[parameters('profiles_fdweb04_name')]",
+            "location": "Global",
+            "sku": {
+                "name": "Standard_AzureFrontDoor"
+            },
+            "kind": "frontdoor",
+            "properties": {
+                "originResponseTimeoutSeconds": 60
+            }
+        },
+        {
+            "type": "Microsoft.Cdn/profiles/afdendpoints",
+            "apiVersion": "2025-04-15",
+            "name": "[concat(parameters('profiles_fdweb04_name'), '/', parameters('profiles_fdweb04_name'))]",
+            "location": "Global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_fdweb04_name'))]"
+            ],
+            "properties": {
+                "enabledState": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Cdn/profiles/origingroups",
+            "apiVersion": "2025-04-15",
+            "name": "[concat(parameters('profiles_fdweb04_name'), '/default-origin-group')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_fdweb04_name'))]"
+            ],
+            "properties": {
+                "loadBalancingSettings": {
+                    "sampleSize": 4,
+                    "successfulSamplesRequired": 3,
+                    "additionalLatencyInMilliseconds": 50
+                },
+                "healthProbeSettings": {
+                    "probePath": "/",
+                    "probeRequestType": "HEAD",
+                    "probeProtocol": "Http",
+                    "probeIntervalInSeconds": 100
+                },
+                "sessionAffinityState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Cdn/profiles/origingroups",
+            "apiVersion": "2025-04-15",
+            "name": "[concat(parameters('profiles_fdweb04_name'), '/video-origin-group')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_fdweb04_name'))]"
+            ],
+            "properties": {
+                "loadBalancingSettings": {
+                    "sampleSize": 4,
+                    "successfulSamplesRequired": 3,
+                    "additionalLatencyInMilliseconds": 50
+                },
+                "healthProbeSettings": {
+                    "probePath": "/",
+                    "probeRequestType": "HEAD",
+                    "probeProtocol": "Http",
+                    "probeIntervalInSeconds": 100
+                },
+                "sessionAffinityState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Cdn/profiles/origingroups/origins",
+            "apiVersion": "2025-04-15",
+            "name": "[concat(parameters('profiles_fdweb04_name'), '/video-origin-group/blob-video-origin')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cdn/profiles/origingroups', parameters('profiles_fdweb04_name'), 'video-origin-group')]",
+                "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_fdweb04_name'))]"
+            ],
+            "properties": {
+                "hostName": "staweb04fdoor.blob.core.windows.net",
+                "httpPort": 80,
+                "httpsPort": 443,
+                "originHostHeader": "staweb04fdoor.blob.core.windows.net",
+                "priority": 1,
+                "weight": 1000,
+                "enabledState": "Enabled",
+                "enforceCertificateNameCheck": true
+            }
+        },
+        {
+            "type": "Microsoft.Cdn/profiles/origingroups/origins",
+            "apiVersion": "2025-04-15",
+            "name": "[concat(parameters('profiles_fdweb04_name'), '/default-origin-group/default-origin')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cdn/profiles/origingroups', parameters('profiles_fdweb04_name'), 'default-origin-group')]",
+                "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_fdweb04_name'))]"
+            ],
+            "properties": {
+                "hostName": "web04fd-cjftd3g7acawg4dn.koreacentral-01.azurewebsites.net",
+                "httpPort": 80,
+                "httpsPort": 443,
+                "originHostHeader": "web04fd-cjftd3g7acawg4dn.koreacentral-01.azurewebsites.net",
+                "priority": 1,
+                "weight": 1000,
+                "enabledState": "Enabled",
+                "enforceCertificateNameCheck": true
+            }
+        },
+        {
+            "type": "Microsoft.Cdn/profiles/afdendpoints/routes",
+            "apiVersion": "2025-04-15",
+            "name": "[concat(parameters('profiles_fdweb04_name'), '/', parameters('profiles_fdweb04_name'), '/default-route')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cdn/profiles/afdendpoints', parameters('profiles_fdweb04_name'), parameters('profiles_fdweb04_name'))]",
+                "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_fdweb04_name'))]",
+                "[resourceId('Microsoft.Cdn/profiles/origingroups', parameters('profiles_fdweb04_name'), 'default-origin-group')]"
+            ],
+            "properties": {
+                "customDomains": [],
+                "originGroup": {
+                    "id": "[resourceId('Microsoft.Cdn/profiles/origingroups', parameters('profiles_fdweb04_name'), 'default-origin-group')]"
+                },
+                "ruleSets": [],
+                "supportedProtocols": [
+                    "Http",
+                    "Https"
+                ],
+                "patternsToMatch": [
+                    "/*"
+                ],
+                "forwardingProtocol": "MatchRequest",
+                "linkToDefaultDomain": "Enabled",
+                "httpsRedirect": "Enabled",
+                "enabledState": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Cdn/profiles/afdendpoints/routes",
+            "apiVersion": "2025-04-15",
+            "name": "[concat(parameters('profiles_fdweb04_name'), '/', parameters('profiles_fdweb04_name'), '/video-route')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cdn/profiles/afdendpoints', parameters('profiles_fdweb04_name'), parameters('profiles_fdweb04_name'))]",
+                "[resourceId('Microsoft.Cdn/profiles', parameters('profiles_fdweb04_name'))]",
+                "[resourceId('Microsoft.Cdn/profiles/origingroups', parameters('profiles_fdweb04_name'), 'video-origin-group')]"
+            ],
+            "properties": {
+                "customDomains": [],
+                "originGroup": {
+                    "id": "[resourceId('Microsoft.Cdn/profiles/origingroups', parameters('profiles_fdweb04_name'), 'video-origin-group')]"
+                },
+                "ruleSets": [],
+                "supportedProtocols": [
+                    "Http",
+                    "Https"
+                ],
+                "patternsToMatch": [
+                    "/video/*"
+                ],
+                "forwardingProtocol": "MatchRequest",
+                "linkToDefaultDomain": "Enabled",
+                "httpsRedirect": "Enabled",
+                "enabledState": "Enabled"
+            }
+        }
+    ]
+}
