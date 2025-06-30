@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_devops01t_name": {
+            "value": null
+        },
+        "userAssignedIdentities_oidc_msi_8bc9_name": {
+            "value": null
+        },
+        "userAssignedIdentities_oidc_msi_add5_name": {
+            "value": null
+        },
+        "serverfarms_asp_web04_externalid": {
+            "value": null
+        }
+    }
+}
