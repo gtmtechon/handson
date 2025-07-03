@@ -1,0 +1,627 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_appweb08_name": {
+            "defaultValue": "appweb08",
+            "type": "String"
+        },
+        "serverfarms_asp_web08_name": {
+            "defaultValue": "asp-web08",
+            "type": "String"
+        },
+        "storageAccounts_stakvapptest_name": {
+            "defaultValue": "stakvapptest",
+            "type": "String"
+        },
+        "userAssignedIdentities_oidc_msi_aa24_name": {
+            "defaultValue": "oidc-msi-aa24",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2025-01-31-preview",
+            "name": "[parameters('userAssignedIdentities_oidc_msi_aa24_name')]",
+            "location": "koreacentral"
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2024-01-01",
+            "name": "[parameters('storageAccounts_stakvapptest_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "dnsEndpointType": "Standard",
+                "defaultToOAuthAuthentication": false,
+                "publicNetworkAccess": "Enabled",
+                "allowCrossTenantReplication": false,
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": true,
+                "allowSharedKeyAccess": true,
+                "largeFileSharesState": "Enabled",
+                "networkAcls": {
+                    "resourceAccessRules": [],
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [
+                        {
+                            "value": "147.6.93.42",
+                            "action": "Allow"
+                        },
+                        {
+                            "value": "121.133.77.36",
+                            "action": "Allow"
+                        }
+                    ],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": false,
+                "encryption": {
+                    "requireInfrastructureEncryption": false,
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('serverfarms_asp_web08_name')]",
+            "location": "Korea Central",
+            "sku": {
+                "name": "P0v3",
+                "tier": "Premium0V3",
+                "size": "P0v3",
+                "family": "Pv3",
+                "capacity": 1
+            },
+            "kind": "linux",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials",
+            "apiVersion": "2025-01-31-preview",
+            "name": "[concat(parameters('userAssignedIdentities_oidc_msi_aa24_name'), '/oidc-credential-8b53')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentities_oidc_msi_aa24_name'))]"
+            ],
+            "properties": {
+                "issuer": "https://token.actions.githubusercontent.com",
+                "subject": "repo:gtmtechon/az-storage-app:ref:refs/heads/main",
+                "audiences": [
+                    "api://AzureADTokenExchange"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('storageAccounts_stakvapptest_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stakvapptest_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "containerDeleteRetentionPolicy": {
+                    "enabled": false
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "allowPermanentDelete": false,
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('storageAccounts_stakvapptest_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stakvapptest_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "protocolSettings": {
+                    "smb": {}
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                    "enabled": false,
+                    "days": 0
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('storageAccounts_stakvapptest_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stakvapptest_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('storageAccounts_stakvapptest_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stakvapptest_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-04-01",
+            "name": "[parameters('sites_appweb08_name')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_asp_web08_name'))]"
+            ],
+            "kind": "app,linux",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_appweb08_name'), '-cvgydqdta7cncrbb.koreacentral-01.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_appweb08_name'), '-cvgydqdta7cncrbb.scm.koreacentral-01.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_asp_web08_name'))]",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "linuxFxVersion": "NODE|22-lts",
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": true,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 1
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "vnetBackupRestoreEnabled": false,
+                "customDomainVerificationId": "0797C2B5BA3D343C7B38935CD454FD631D76328DFFA01C58ACEBA9F09D301EA5",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "publicNetworkAccess": "Enabled",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned",
+                "autoGeneratedDomainNameLabelScope": "TenantReuse"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/ftp')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/scm')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/web')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "linuxFxVersion": "NODE|22-lts",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2022",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "REDACTED",
+                "scmType": "GitHubAction",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": true,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": true
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "publicNetworkAccess": "Enabled",
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 132,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 1,
+                "azureStorageAccounts": {
+                    "appdata": {
+                        "type": "AzureFiles",
+                        "accountName": "stakvapptest",
+                        "shareName": "pictures",
+                        "mountPath": "/mnt/appdata",
+                        "protocol": "Smb"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/07379ae8-6db2-4c16-a0da-e3b94fe0e23e')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-02T06:45:34.3031324Z",
+                "end_time": "2025-07-02T06:45:39.8388164Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/075b2e2d-4149-4d3f-9315-f21beff0ad71')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-03T05:39:55.2887108Z",
+                "end_time": "2025-07-03T05:40:00.6590846Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/1a12804c-4809-4de8-a0ee-2e1e9cff4263')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-03T05:42:33.1173465Z",
+                "end_time": "2025-07-03T05:42:38.722593Z",
+                "active": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/3c334dd6-f6ab-42f5-9ffa-f359dd2250ca')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-02T05:34:58.9828177Z",
+                "end_time": "2025-07-02T05:35:04.2044382Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/703bfba5-d45a-4378-93c3-a46a349a49e8')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-02T23:57:10.9023116Z",
+                "end_time": "2025-07-02T23:57:18.8142209Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/8882a00b-3b46-42d4-9dc4-0ba6a9c76e76')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-02T13:55:10.2877703Z",
+                "end_time": "2025-07-02T13:55:15.0752303Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/9be0eb06-0920-4445-bcb1-b753dc5171e6')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-03T05:26:26.2145175Z",
+                "end_time": "2025-07-03T05:26:31.0482549Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/cdd6411e-18b4-46d7-bbe7-98456dc58f04')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-02T04:34:06.7639434Z",
+                "end_time": "2025-07-02T04:34:11.9222401Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/d55b6ee6-cfa0-4c43-ad77-fd3d7ee5d66e')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-02T06:17:53.1017427Z",
+                "end_time": "2025-07-02T06:17:58.2462677Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/f9d24488-9b48-45d0-9683-028e99e651ff')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-07-02T23:56:50.3981903Z",
+                "end_time": "2025-07-02T23:56:56.0170596Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-04-01",
+            "name": "[concat(parameters('sites_appweb08_name'), '/', parameters('sites_appweb08_name'), '-cvgydqdta7cncrbb.koreacentral-01.azurewebsites.net')]",
+            "location": "Korea Central",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_appweb08_name'))]"
+            ],
+            "properties": {
+                "siteName": "appweb08",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('storageAccounts_stakvapptest_name'), '/default/$web')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stakvapptest_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stakvapptest_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('storageAccounts_stakvapptest_name'), '/default/video')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stakvapptest_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stakvapptest_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "Container"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('storageAccounts_stakvapptest_name'), '/default/pictures')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_stakvapptest_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stakvapptest_name'))]"
+            ],
+            "properties": {
+                "accessTier": "TransactionOptimized",
+                "shareQuota": 102400,
+                "enabledProtocols": "SMB"
+            }
+        }
+    ]
+}
