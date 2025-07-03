@@ -1,0 +1,689 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "loadBalancers_lb_web05_vmss_name": {
+            "defaultValue": "lb-web05-vmss",
+            "type": "String"
+        },
+        "sshPublicKeys_web05_vmss_key_name": {
+            "defaultValue": "web05_vmss_key",
+            "type": "String"
+        },
+        "virtualNetworks_vnet_web05_vmss_name": {
+            "defaultValue": "vnet-web05-vmss",
+            "type": "String"
+        },
+        "virtualMachineScaleSets_web05_vmss_name": {
+            "defaultValue": "web05-vmss",
+            "type": "String"
+        },
+        "virtualMachines_web05_vmss_ce884ad0_name": {
+            "defaultValue": "web05-vmss_ce884ad0",
+            "type": "String"
+        },
+        "publicIPAddresses_lb_web05_vmss_publicip_name": {
+            "defaultValue": "lb-web05-vmss-publicip",
+            "type": "String"
+        },
+        "networkInterfaces_vnet_web05_vmss_nic01_edd3a410_name": {
+            "defaultValue": "vnet-web05-vmss-nic01-edd3a410",
+            "type": "String"
+        },
+        "networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name": {
+            "defaultValue": "basicNsgvnet-web05-vmss-nic01",
+            "type": "String"
+        },
+        "publicIPAddresses_publicIp_vnet_web05_vmss_nic01_edd3a410_name": {
+            "defaultValue": "publicIp-vnet-web05-vmss-nic01-edd3a410",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/sshPublicKeys",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('sshPublicKeys_web05_vmss_key_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCwNq2aoW/jshWU/OPzXJWUZ26kYtbVi/39dhGGBGq7nI8wZLZVuMCmJ47ekHG36TCzlRdcmsq1LL6SaTTO4Lgq+7XKrbQlmOik1IOYqneJgaKwHrbYXmm49w3Bqxx3wRtZba82rRYAw7jxew+0xhZyUC1Cyt7OjGPuGRCER2Q5vAsIavG2HB9+2rEOjKwkxb5FxoPQL8Hv9Hb1z3nZjYTCyH5jKyJWrRGqToCFI2ZHD34Kh/a24qiwcgnrQJqBM8dBIgGnu46kmpNvQ/9/6Ny2yZUYWLPyvgB/nTPWqFsFxkp7OnB0f06sKNWv6hiIR+gI8KyDrz0sQ5wVtLv5ubUj4bqAhKlTw3cZrfeWwzE8A8wuA7l6FW6f+Eq+Rm9YKRxPZEadCSejBYl9URVqA1ujfO04/l921/RzWLEi0U9NwHyzgLgod0vVlSKPgLpAR7M/BBtHkQDrbqM44/6dyuIQDQanLChh/ZBYduZpQfFZgej1Y5gitdzeifCX0rd2Qd0= generated-by-azure"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Tcp",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'), 'Tcp')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 300,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAnySSHInbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'), 'AllowAnySSHInbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 310,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('publicIPAddresses_lb_web05_vmss_publicip_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "4.230.24.75",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 15,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('publicIPAddresses_publicIp_vnet_web05_vmss_nic01_edd3a410_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "4.218.16.113",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 15,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('virtualNetworks_vnet_web05_vmss_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "172.16.0.0/16"
+                    ]
+                },
+                "privateEndpointVNetPolicies": "Disabled",
+                "subnets": [
+                    {
+                        "name": "snet-vmss",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web05_vmss_name'), 'snet-vmss')]",
+                        "properties": {
+                            "addressPrefixes": [
+                                "172.16.0.0/24"
+                            ],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachineScaleSets/extensions",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('virtualMachineScaleSets_web05_vmss_name'), '/HealthExtension')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('virtualMachineScaleSets_web05_vmss_name'))]"
+            ],
+            "properties": {
+                "provisioningState": "Succeeded",
+                "autoUpgradeMinorVersion": false,
+                "publisher": "Microsoft.ManagedServices",
+                "type": "ApplicationHealthLinux",
+                "typeHandlerVersion": "1.0",
+                "settings": {
+                    "protocol": "http",
+                    "port": 8080,
+                    "requestPath": "/api"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachineScaleSets/virtualMachines",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('virtualMachineScaleSets_web05_vmss_name'), '/', parameters('virtualMachineScaleSets_web05_vmss_name'), '_ce884ad0')]",
+            "location": "KoreaCentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('virtualMachineScaleSets_web05_vmss_name'))]"
+            ],
+            "zones": [
+                null
+            ]
+        },
+        {
+            "type": "Microsoft.Network/loadBalancers",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('loadBalancers_lb_web05_vmss_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_lb_web05_vmss_publicip_name'))]"
+            ],
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_web05_vmss_name'), '-frontendconfig01')]",
+                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_web05_vmss_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_web05_vmss_name'), '-frontendconfig01'))]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_lb_web05_vmss_publicip_name'))]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "bepool",
+                        "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_web05_vmss_name'), 'bepool')]",
+                        "properties": {
+                            "loadBalancerBackendAddresses": [
+                                {
+                                    "name": "c14be708-6c14-4d4e-bd77-21ccde1bfc7f",
+                                    "properties": {}
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_web05_vmss_name'), '-lbrule01')]",
+                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_web05_vmss_name')), concat('/loadBalancingRules/', parameters('loadBalancers_lb_web05_vmss_name'), '-lbrule01'))]",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_web05_vmss_name')), concat('/frontendIPConfigurations/', parameters('loadBalancers_lb_web05_vmss_name'), '-frontendconfig01'))]"
+                            },
+                            "frontendPort": 80,
+                            "backendPort": 8080,
+                            "enableFloatingIP": false,
+                            "idleTimeoutInMinutes": 15,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": true,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_web05_vmss_name'), 'bepool')]"
+                            },
+                            "backendAddressPools": [
+                                {
+                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_web05_vmss_name'), 'bepool')]"
+                                }
+                            ],
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_web05_vmss_name')), concat('/probes/', parameters('loadBalancers_lb_web05_vmss_name'), '-probe01'))]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "[concat(parameters('loadBalancers_lb_web05_vmss_name'), '-probe01')]",
+                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_web05_vmss_name')), concat('/probes/', parameters('loadBalancers_lb_web05_vmss_name'), '-probe01'))]",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 8080,
+                            "intervalInSeconds": 15,
+                            "numberOfProbes": 2,
+                            "probeThreshold": 1,
+                            "noHealthyBackendsBehavior": "AllProbedDown"
+                        }
+                    }
+                ],
+                "inboundNatRules": [],
+                "outboundRules": [],
+                "inboundNatPools": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/loadBalancers/backendAddressPools",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('loadBalancers_lb_web05_vmss_name'), '/bepool')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_lb_web05_vmss_name'))]"
+            ],
+            "properties": {
+                "loadBalancerBackendAddresses": [
+                    {
+                        "name": "c14be708-6c14-4d4e-bd77-21ccde1bfc7f",
+                        "properties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'), '/AllowAnySSHInbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'))]"
+            ],
+            "properties": {
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 310,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'), '/Tcp')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'))]"
+            ],
+            "properties": {
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "8080",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 300,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('virtualNetworks_vnet_web05_vmss_name'), '/snet-vmss')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet_web05_vmss_name'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "172.16.0.0/24"
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('virtualMachines_web05_vmss_ce884ad0_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('virtualMachineScaleSets_web05_vmss_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vnet_web05_vmss_nic01_edd3a410_name'))]"
+            ],
+            "tags": {
+                "VirtualMachineProfileTimeCreated": "7/1/2025 3:11:17 AM +00:00"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B2s"
+                },
+                "virtualMachineScaleSet": {
+                    "id": "[resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('virtualMachineScaleSets_web05_vmss_name'))]"
+                },
+                "additionalCapabilities": {
+                    "hibernationEnabled": false
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "canonical",
+                        "offer": "0001-com-ubuntu-server-jammy",
+                        "sku": "22_04-lts-gen2",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_web05_vmss_ce884ad0_name'), '_disk1_476f35ff357a4caa9cc2723ae25b62be')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_web05_vmss_ce884ad0_name'), '_disk1_476f35ff357a4caa9cc2723ae25b62be'))]"
+                        },
+                        "deleteOption": "Delete",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": [],
+                    "diskControllerType": "SCSI"
+                },
+                "osProfile": {
+                    "computerName": "web05-vmsDQ494G",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/azureuser/.ssh/authorized_keys",
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCwNq2aoW/jshWU/OPzXJWUZ26kYtbVi/39dhGGBGq7nI8wZLZVuMCmJ47ekHG36TCzlRdcmsq1LL6SaTTO4Lgq+7XKrbQlmOik1IOYqneJgaKwHrbYXmm49w3Bqxx3wRtZba82rRYAw7jxew+0xhZyUC1Cyt7OjGPuGRCER2Q5vAsIavG2HB9+2rEOjKwkxb5FxoPQL8Hv9Hb1z3nZjYTCyH5jKyJWrRGqToCFI2ZHD34Kh/a24qiwcgnrQJqBM8dBIgGnu46kmpNvQ/9/6Ny2yZUYWLPyvgB/nTPWqFsFxkp7OnB0f06sKNWv6hiIR+gI8KyDrz0sQ5wVtLv5ubUj4bqAhKlTw3cZrfeWwzE8A8wuA7l6FW6f+Eq+Rm9YKRxPZEadCSejBYl9URVqA1ujfO04/l921/RzWLEi0U9NwHyzgLgod0vVlSKPgLpAR7M/BBtHkQDrbqM44/6dyuIQDQanLChh/ZBYduZpQfFZgej1Y5gitdzeifCX0rd2Qd0= generated-by-azure"
+                                }
+                            ]
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "AutomaticByPlatform",
+                            "automaticByPlatformSettings": {
+                                "rebootSetting": "IfRequired"
+                            },
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "securityProfile": {
+                    "uefiSettings": {
+                        "secureBootEnabled": true,
+                        "vTpmEnabled": true
+                    },
+                    "securityType": "TrustedLaunch"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vnet_web05_vmss_nic01_edd3a410_name'))]",
+                            "properties": {
+                                "primary": true,
+                                "deleteOption": "Delete"
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                },
+                "priority": "Regular"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachineScaleSets",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('virtualMachineScaleSets_web05_vmss_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web05_vmss_name'), 'snet-vmss')]",
+                "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_web05_vmss_name'), 'bepool')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'))]"
+            ],
+            "sku": {
+                "name": "Mix",
+                "capacity": 1
+            },
+            "properties": {
+                "singlePlacementGroup": false,
+                "orchestrationMode": "Flexible",
+                "upgradePolicy": {
+                    "mode": "Automatic"
+                },
+                "scaleInPolicy": {
+                    "rules": [
+                        "Default"
+                    ],
+                    "forceDeletion": false
+                },
+                "virtualMachineProfile": {
+                    "osProfile": {
+                        "computerNamePrefix": "web05-vms",
+                        "adminUsername": "azureuser",
+                        "linuxConfiguration": {
+                            "disablePasswordAuthentication": true,
+                            "ssh": {
+                                "publicKeys": [
+                                    {
+                                        "path": "/home/azureuser/.ssh/authorized_keys",
+                                        "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCwNq2aoW/jshWU/OPzXJWUZ26kYtbVi/39dhGGBGq7nI8wZLZVuMCmJ47ekHG36TCzlRdcmsq1LL6SaTTO4Lgq+7XKrbQlmOik1IOYqneJgaKwHrbYXmm49w3Bqxx3wRtZba82rRYAw7jxew+0xhZyUC1Cyt7OjGPuGRCER2Q5vAsIavG2HB9+2rEOjKwkxb5FxoPQL8Hv9Hb1z3nZjYTCyH5jKyJWrRGqToCFI2ZHD34Kh/a24qiwcgnrQJqBM8dBIgGnu46kmpNvQ/9/6Ny2yZUYWLPyvgB/nTPWqFsFxkp7OnB0f06sKNWv6hiIR+gI8KyDrz0sQ5wVtLv5ubUj4bqAhKlTw3cZrfeWwzE8A8wuA7l6FW6f+Eq+Rm9YKRxPZEadCSejBYl9URVqA1ujfO04/l921/RzWLEi0U9NwHyzgLgod0vVlSKPgLpAR7M/BBtHkQDrbqM44/6dyuIQDQanLChh/ZBYduZpQfFZgej1Y5gitdzeifCX0rd2Qd0= generated-by-azure"
+                                    }
+                                ]
+                            },
+                            "provisionVMAgent": true,
+                            "patchSettings": {
+                                "patchMode": "AutomaticByPlatform",
+                                "automaticByPlatformSettings": {
+                                    "rebootSetting": "IfRequired"
+                                },
+                                "assessmentMode": "ImageDefault"
+                            }
+                        },
+                        "secrets": [],
+                        "allowExtensionOperations": true,
+                        "requireGuestProvisionSignal": true
+                    },
+                    "storageProfile": {
+                        "osDisk": {
+                            "osType": "Linux",
+                            "createOption": "FromImage",
+                            "caching": "ReadWrite",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS"
+                            },
+                            "deleteOption": "Delete",
+                            "diskSizeGB": 30
+                        },
+                        "imageReference": {
+                            "publisher": "canonical",
+                            "offer": "0001-com-ubuntu-server-jammy",
+                            "sku": "22_04-lts-gen2",
+                            "version": "latest"
+                        },
+                        "diskControllerType": "SCSI"
+                    },
+                    "networkProfile": {
+                        "networkApiVersion": "2020-11-01",
+                        "networkInterfaceConfigurations": [
+                            {
+                                "name": "[concat('vnet-', parameters('virtualMachineScaleSets_web05_vmss_name'), '-nic01')]",
+                                "properties": {
+                                    "primary": true,
+                                    "enableAcceleratedNetworking": false,
+                                    "disableTcpStateTracking": false,
+                                    "enableIPForwarding": false,
+                                    "auxiliaryMode": "None",
+                                    "auxiliarySku": "None",
+                                    "deleteOption": "Delete",
+                                    "ipConfigurations": [
+                                        {
+                                            "name": "[concat('vnet-', parameters('virtualMachineScaleSets_web05_vmss_name'), '-nic01-defaultIpConfiguration')]",
+                                            "properties": {
+                                                "privateIPAddressVersion": "IPv4",
+                                                "subnet": {
+                                                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web05_vmss_name'), 'snet-vmss')]"
+                                                },
+                                                "primary": true,
+                                                "publicIPAddressConfiguration": {
+                                                    "name": "[concat('publicIp-vnet-', parameters('virtualMachineScaleSets_web05_vmss_name'), '-nic01')]",
+                                                    "properties": {
+                                                        "idleTimeoutInMinutes": 15,
+                                                        "ipTags": [],
+                                                        "publicIPAddressVersion": "IPv4"
+                                                    }
+                                                },
+                                                "applicationSecurityGroups": [],
+                                                "loadBalancerBackendAddressPools": [
+                                                    {
+                                                        "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_web05_vmss_name'), 'bepool')]"
+                                                    }
+                                                ],
+                                                "applicationGatewayBackendAddressPools": []
+                                            }
+                                        }
+                                    ],
+                                    "networkSecurityGroup": {
+                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'))]"
+                                    },
+                                    "dnsSettings": {
+                                        "dnsServers": []
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "diagnosticsProfile": {
+                        "bootDiagnostics": {
+                            "enabled": true
+                        }
+                    },
+                    "extensionProfile": {
+                        "extensions": [
+                            {
+                                "name": "HealthExtension",
+                                "properties": {
+                                    "autoUpgradeMinorVersion": false,
+                                    "publisher": "Microsoft.ManagedServices",
+                                    "type": "ApplicationHealthLinux",
+                                    "typeHandlerVersion": "1.0",
+                                    "settings": {
+                                        "protocol": "http",
+                                        "port": 8080,
+                                        "requestPath": "/api"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "securityProfile": {
+                        "uefiSettings": {
+                            "secureBootEnabled": true,
+                            "vTpmEnabled": true
+                        },
+                        "securityType": "TrustedLaunch"
+                    }
+                },
+                "additionalCapabilities": {
+                    "hibernationEnabled": false
+                },
+                "platformFaultDomainCount": 1,
+                "automaticRepairsPolicy": {
+                    "enabled": false,
+                    "gracePeriod": "PT10M",
+                    "repairAction": "Replace"
+                },
+                "constrainedMaximumCapacity": false,
+                "skuProfile": {
+                    "vmSizes": [
+                        {
+                            "name": "Standard_B2s"
+                        },
+                        {
+                            "name": "Standard_D2as_v5"
+                        }
+                    ],
+                    "allocationStrategy": "LowestPrice"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('networkInterfaces_vnet_web05_vmss_nic01_edd3a410_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_publicIp_vnet_web05_vmss_nic01_edd3a410_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web05_vmss_name'), 'snet-vmss')]",
+                "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_web05_vmss_name'), 'bepool')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'))]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "vnet-web05-vmss-nic01-defaultIpConfiguration",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vnet_web05_vmss_nic01_edd3a410_name')), '/ipConfigurations/vnet-web05-vmss-nic01-defaultIpConfiguration')]",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "privateIPAddress": "172.16.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_publicIp_vnet_web05_vmss_nic01_edd3a410_name'))]",
+                                "properties": {
+                                    "deleteOption": "Delete"
+                                }
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web05_vmss_name'), 'snet-vmss')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4",
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_lb_web05_vmss_name'), 'bepool')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "disableTcpStateTracking": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_basicNsgvnet_web05_vmss_nic01_name'))]"
+                },
+                "nicType": "Standard",
+                "auxiliaryMode": "None",
+                "auxiliarySku": "None"
+            }
+        }
+    ]
+}
