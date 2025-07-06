@@ -1,0 +1,66 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_vnet_web11_onp_name": {
+            "value": null
+        },
+        "virtualMachines_web11_onp_vm_ap_name": {
+            "value": null
+        },
+        "virtualMachines_web11_onp_vm_db_name": {
+            "value": null
+        },
+        "virtualMachines_web11_onp_vm_gw_name": {
+            "value": null
+        },
+        "sshPublicKeys_web11_onp_vm_ap_key_name": {
+            "value": null
+        },
+        "sshPublicKeys_web11_onp_vm_db_key_name": {
+            "value": null
+        },
+        "sshPublicKeys_web11_onp_vm_gw_key_name": {
+            "value": null
+        },
+        "networkInterfaces_web11_onp_vm_ap857_name": {
+            "value": null
+        },
+        "networkInterfaces_web11_onp_vm_db798_name": {
+            "value": null
+        },
+        "networkInterfaces_web11_onp_vm_gw653_name": {
+            "value": null
+        },
+        "publicIPAddresses_web11_onp_vm_ap_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_web11_onp_vm_db_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_web11_onp_vm_gw_ip_name": {
+            "value": null
+        },
+        "networkSecurityGroups_web11_onp_vm_ap_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_web11_onp_vm_db_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_web11_onp_vm_gw_nsg_name": {
+            "value": null
+        },
+        "schedules_shutdown_computevm_web11_onp_vm_ap_name": {
+            "value": null
+        },
+        "schedules_shutdown_computevm_web11_onp_vm_db_name": {
+            "value": null
+        },
+        "schedules_shutdown_computevm_web11_onp_vm_gw_name": {
+            "value": null
+        },
+        "publicIPAddresses_pip_vnet_web11_onp_koreacentral_sn_db_name": {
+            "value": null
+        }
+    }
+}

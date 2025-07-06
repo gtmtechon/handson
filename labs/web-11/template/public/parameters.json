@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_iotmonweb_name": {
+            "value": null
+        },
+        "serverfarms_asp_web11_name": {
+            "value": null
+        },
+        "storageAccounts_staweb11_name": {
+            "value": null
+        },
+        "userAssignedIdentities_oidc_msi_84df_name": {
+            "value": null
+        }
+    }
+}

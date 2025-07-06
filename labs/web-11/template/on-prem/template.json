@@ -1,0 +1,1136 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_vnet_web11_onp_name": {
+            "defaultValue": "vnet-web11-onp",
+            "type": "String"
+        },
+        "virtualMachines_web11_onp_vm_ap_name": {
+            "defaultValue": "web11-onp-vm-ap",
+            "type": "String"
+        },
+        "virtualMachines_web11_onp_vm_db_name": {
+            "defaultValue": "web11-onp-vm-db",
+            "type": "String"
+        },
+        "virtualMachines_web11_onp_vm_gw_name": {
+            "defaultValue": "web11-onp-vm-gw",
+            "type": "String"
+        },
+        "sshPublicKeys_web11_onp_vm_ap_key_name": {
+            "defaultValue": "web11-onp-vm-ap_key",
+            "type": "String"
+        },
+        "sshPublicKeys_web11_onp_vm_db_key_name": {
+            "defaultValue": "web11-onp-vm-db_key",
+            "type": "String"
+        },
+        "sshPublicKeys_web11_onp_vm_gw_key_name": {
+            "defaultValue": "web11-onp-vm-gw_key",
+            "type": "String"
+        },
+        "networkInterfaces_web11_onp_vm_ap857_name": {
+            "defaultValue": "web11-onp-vm-ap857",
+            "type": "String"
+        },
+        "networkInterfaces_web11_onp_vm_db798_name": {
+            "defaultValue": "web11-onp-vm-db798",
+            "type": "String"
+        },
+        "networkInterfaces_web11_onp_vm_gw653_name": {
+            "defaultValue": "web11-onp-vm-gw653",
+            "type": "String"
+        },
+        "publicIPAddresses_web11_onp_vm_ap_ip_name": {
+            "defaultValue": "web11-onp-vm-ap-ip",
+            "type": "String"
+        },
+        "publicIPAddresses_web11_onp_vm_db_ip_name": {
+            "defaultValue": "web11-onp-vm-db-ip",
+            "type": "String"
+        },
+        "publicIPAddresses_web11_onp_vm_gw_ip_name": {
+            "defaultValue": "web11-onp-vm-gw-ip",
+            "type": "String"
+        },
+        "networkSecurityGroups_web11_onp_vm_ap_nsg_name": {
+            "defaultValue": "web11-onp-vm-ap-nsg",
+            "type": "String"
+        },
+        "networkSecurityGroups_web11_onp_vm_db_nsg_name": {
+            "defaultValue": "web11-onp-vm-db-nsg",
+            "type": "String"
+        },
+        "networkSecurityGroups_web11_onp_vm_gw_nsg_name": {
+            "defaultValue": "web11-onp-vm-gw-nsg",
+            "type": "String"
+        },
+        "schedules_shutdown_computevm_web11_onp_vm_ap_name": {
+            "defaultValue": "shutdown-computevm-web11-onp-vm-ap",
+            "type": "String"
+        },
+        "schedules_shutdown_computevm_web11_onp_vm_db_name": {
+            "defaultValue": "shutdown-computevm-web11-onp-vm-db",
+            "type": "String"
+        },
+        "schedules_shutdown_computevm_web11_onp_vm_gw_name": {
+            "defaultValue": "shutdown-computevm-web11-onp-vm-gw",
+            "type": "String"
+        },
+        "publicIPAddresses_pip_vnet_web11_onp_koreacentral_sn_db_name": {
+            "defaultValue": "pip-vnet-web11-onp-koreacentral-sn-db",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/sshPublicKeys",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('sshPublicKeys_web11_onp_vm_ap_key_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDRuw1UGuIow1inXVuCGHG7fQvk4fUAKFZWsmYwmi+AsNP+93KGF6GXRXMftNEJv4jOlBy1dhdDQsFgzllqUum+MCln53qFpNThwzTU/V2vklIUEPKjqNYaZXyRp2GJkIDOh5t3oBr9rZ7slzfeOWkdb217FQSC09PWerzDpDYHqVmE+qy/bItl/ItzbzraViLB5qQqE1pqir9MqckEcocj6F7yK8LqFMS5/50T65UHPAelwFuWEPvyz406Gegt//e7x+ZGsIsz6aYKbZ+2Zt+GyPliii/g4psxxlQoPnlVnv68zLLaAQYr8FygLsCc78Zo5gM27huveV1oNPcthaLdYpud1tB5zm3+Ng2i8E34VZnoqNxbj5JR8V+9gUnBwYCKXVUOqZoIT1+kShscRHXUfGoSnClWhtYH81AUL1psX0Ttgq8ycplBG5QOeL9LSQhwJhvWjjsKoqUENb0IbFV0y3qUZarAGu1Ji+BqyASG6Jf9bg2xSOaYD6lW9/S9Wa0= generated-by-azure"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/sshPublicKeys",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('sshPublicKeys_web11_onp_vm_db_key_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCXI3pjh9ZZW8w/KaoFWd1VzkOMr7KW+8Ntlk6bqp+BAcN0cBy653QaW7aEuXgBy/wr14GC1wnDd0Lg9TpKWjiecLTJJl7v1R2EITXHlpuvr+1ojDh5IYLFehZRyxvXdyAlGIL70LhACTudqbjPTMU+VOVuMQqOHsE8BI5JJgu+EYmqquw3o7wKYo2UjUc3s2IIspoWLuAqPtBtL6ijibcHuKC9u4B0UBQA/AYCHuL7DKuGdI+OkcmJ1bKL0H2Pn25DHdJM+uoxhBQsw975PY/f8Y175SufG2QEAKfqNDR9HEAiFVSfBjiHW6yR9XN4EGYuXXMxXpF7cLB0q6WrtN3hjNVUwOKiiO5aia+7oi/ND3W+bherAGuhtZXSy0roV+tynmXjFeNCFaqtnFDzH0kW4YNf4dcqvN8D65+PBPfgqcIyn55QvVODc+JZrYe8HLEMLaN3ED0qCZYiap7JYMr4DuP2wa6glGG03yRhah5+Dk8EnseYV4EDASaLP9Tw/Dk= generated-by-azure"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/sshPublicKeys",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('sshPublicKeys_web11_onp_vm_gw_key_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDDsRXNQeRtt1Ul5lyppcdqm0OtmCM0OxnlvIIM6Y+qSK1yfbJpE2XnQ2fZ10o7dMkG3dqufuK7uQZoS45gzBcClaEozovip5SnXylCrysC62XFEsQ/Ou99+N1+u26Fl1qkZChVRnktHsHovjOyLCcnHELBiTei4QfvNtuHJcsL2cpJx/lYkjXNspPZJSrKpyF7ZGAtEYLCVasK258Li6LHLqeOAt+dmDUzBTRNpNKrSw+T4Y88i53L1CU5SOTRMHHG2rKu8XZqbYcD4ERy7I3Cn8f3dOOrMev6zgdnTKcJeSaT9rFbjPYGcE0MbyZ9M62XXxbgpHdxU/LAo3iqJiGnqcqBc8JbiT9+M/6zsRhDMuXazBMnT1dDjk/e8Xeslhy38TYSbhcySCCJhsVxEpLBrACzM4bx/u6e4qH3+1RU1i5kc2TKTL64ffjhCkponvrllFCZtcaWGwMlar3ZTID73pSXesw17A9SzBA6Y1hPL+mV7p/ligzLpQeA8BkoXeE= generated-by-azure"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('networkSecurityGroups_web11_onp_vm_ap_nsg_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_web11_onp_vm_ap_nsg_name'), 'SSH')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 300,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "AllowAnySSHInbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'), 'AllowAnySSHInbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAnyPostgreSQLInbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'), 'AllowAnyPostgreSQLInbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "5432",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 110,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAnyCustom8080Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'), 'AllowAnyCustom8080Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 120,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'), 'SSH')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 300,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAnyCustom8080Inbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'), 'AllowAnyCustom8080Inbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 310,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAnyHTTPSInbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'), 'AllowAnyHTTPSInbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 320,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAnyHTTPInbound",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'), 'AllowAnyHTTPInbound')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "80",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 330,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('publicIPAddresses_pip_vnet_web11_onp_koreacentral_sn_db_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "52.141.47.231",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": [],
+                "ddosSettings": {
+                    "protectionMode": "VirtualNetworkInherited"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('publicIPAddresses_web11_onp_vm_ap_ip_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "4.217.181.232",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('publicIPAddresses_web11_onp_vm_db_ip_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "4.218.10.137",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('publicIPAddresses_web11_onp_vm_gw_ip_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "ipAddress": "4.217.181.242",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "dnsSettings": {
+                    "domainNameLabel": "iotmonproxy",
+                    "fqdn": "iotmonproxy.koreacentral.cloudapp.azure.com"
+                },
+                "ipTags": [],
+                "ddosSettings": {
+                    "protectionMode": "VirtualNetworkInherited"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('virtualNetworks_vnet_web11_onp_name')]",
+            "location": "koreacentral",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "21.0.0.0/16"
+                    ]
+                },
+                "encryption": {
+                    "enabled": false,
+                    "enforcement": "AllowUnencrypted"
+                },
+                "privateEndpointVNetPolicies": "Disabled",
+                "subnets": [
+                    {
+                        "name": "sn-ap",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web11_onp_name'), 'sn-ap')]",
+                        "properties": {
+                            "addressPrefixes": [
+                                "21.0.0.0/24"
+                            ],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "sn-db",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web11_onp_name'), 'sn-db')]",
+                        "properties": {
+                            "addressPrefixes": [
+                                "21.0.1.0/24"
+                            ],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    },
+                    {
+                        "name": "sn-gw",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web11_onp_name'), 'sn-gw')]",
+                        "properties": {
+                            "addressPrefixes": [
+                                "21.0.254.0/24"
+                            ],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('virtualMachines_web11_onp_vm_ap_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web11_onp_vm_ap857_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B2s"
+                },
+                "additionalCapabilities": {
+                    "hibernationEnabled": false
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "canonical",
+                        "offer": "ubuntu-24_04-lts",
+                        "sku": "server",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_web11_onp_vm_ap_name'), '_OsDisk_1_eb4fd3391ee6486397a302bf778dd325')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_web11_onp_vm_ap_name'), '_OsDisk_1_eb4fd3391ee6486397a302bf778dd325'))]"
+                        },
+                        "deleteOption": "Delete"
+                    },
+                    "dataDisks": [],
+                    "diskControllerType": "SCSI"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_web11_onp_vm_ap_name')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/azureuser/.ssh/authorized_keys",
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDRuw1UGuIow1inXVuCGHG7fQvk4fUAKFZWsmYwmi+AsNP+93KGF6GXRXMftNEJv4jOlBy1dhdDQsFgzllqUum+MCln53qFpNThwzTU/V2vklIUEPKjqNYaZXyRp2GJkIDOh5t3oBr9rZ7slzfeOWkdb217FQSC09PWerzDpDYHqVmE+qy/bItl/ItzbzraViLB5qQqE1pqir9MqckEcocj6F7yK8LqFMS5/50T65UHPAelwFuWEPvyz406Gegt//e7x+ZGsIsz6aYKbZ+2Zt+GyPliii/g4psxxlQoPnlVnv68zLLaAQYr8FygLsCc78Zo5gM27huveV1oNPcthaLdYpud1tB5zm3+Ng2i8E34VZnoqNxbj5JR8V+9gUnBwYCKXVUOqZoIT1+kShscRHXUfGoSnClWhtYH81AUL1psX0Ttgq8ycplBG5QOeL9LSQhwJhvWjjsKoqUENb0IbFV0y3qUZarAGu1Ji+BqyASG6Jf9bg2xSOaYD6lW9/S9Wa0= generated-by-azure"
+                                }
+                            ]
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "securityProfile": {
+                    "uefiSettings": {
+                        "secureBootEnabled": true,
+                        "vTpmEnabled": true
+                    },
+                    "securityType": "TrustedLaunch"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web11_onp_vm_ap857_name'))]",
+                            "properties": {
+                                "deleteOption": "Detach"
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('virtualMachines_web11_onp_vm_db_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web11_onp_vm_db798_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B2s"
+                },
+                "additionalCapabilities": {
+                    "hibernationEnabled": false
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "canonical",
+                        "offer": "ubuntu-24_04-lts",
+                        "sku": "server",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_web11_onp_vm_db_name'), '_OsDisk_1_18343a8ef35c48109cf197640dd29ae0')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_web11_onp_vm_db_name'), '_OsDisk_1_18343a8ef35c48109cf197640dd29ae0'))]"
+                        },
+                        "deleteOption": "Delete"
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "data",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "writeAcceleratorEnabled": false,
+                            "managedDisk": {
+                                "id": "[resourceId('Microsoft.Compute/disks', 'data')]"
+                            },
+                            "deleteOption": "Detach",
+                            "toBeDetached": false
+                        }
+                    ],
+                    "diskControllerType": "SCSI"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_web11_onp_vm_db_name')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/azureuser/.ssh/authorized_keys",
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCXI3pjh9ZZW8w/KaoFWd1VzkOMr7KW+8Ntlk6bqp+BAcN0cBy653QaW7aEuXgBy/wr14GC1wnDd0Lg9TpKWjiecLTJJl7v1R2EITXHlpuvr+1ojDh5IYLFehZRyxvXdyAlGIL70LhACTudqbjPTMU+VOVuMQqOHsE8BI5JJgu+EYmqquw3o7wKYo2UjUc3s2IIspoWLuAqPtBtL6ijibcHuKC9u4B0UBQA/AYCHuL7DKuGdI+OkcmJ1bKL0H2Pn25DHdJM+uoxhBQsw975PY/f8Y175SufG2QEAKfqNDR9HEAiFVSfBjiHW6yR9XN4EGYuXXMxXpF7cLB0q6WrtN3hjNVUwOKiiO5aia+7oi/ND3W+bherAGuhtZXSy0roV+tynmXjFeNCFaqtnFDzH0kW4YNf4dcqvN8D65+PBPfgqcIyn55QvVODc+JZrYe8HLEMLaN3ED0qCZYiap7JYMr4DuP2wa6glGG03yRhah5+Dk8EnseYV4EDASaLP9Tw/Dk= generated-by-azure"
+                                }
+                            ]
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "securityProfile": {
+                    "uefiSettings": {
+                        "secureBootEnabled": true,
+                        "vTpmEnabled": true
+                    },
+                    "securityType": "TrustedLaunch"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web11_onp_vm_db798_name'))]",
+                            "properties": {
+                                "deleteOption": "Delete"
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('virtualMachines_web11_onp_vm_gw_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web11_onp_vm_gw653_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B2s"
+                },
+                "additionalCapabilities": {
+                    "hibernationEnabled": false
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "canonical",
+                        "offer": "ubuntu-24_04-lts",
+                        "sku": "server",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_web11_onp_vm_gw_name'), '_OsDisk_1_b3b955a64c0f40fc8743510b03814fa8')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_web11_onp_vm_gw_name'), '_OsDisk_1_b3b955a64c0f40fc8743510b03814fa8'))]"
+                        },
+                        "deleteOption": "Delete"
+                    },
+                    "dataDisks": [],
+                    "diskControllerType": "SCSI"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_web11_onp_vm_gw_name')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/azureuser/.ssh/authorized_keys",
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDDsRXNQeRtt1Ul5lyppcdqm0OtmCM0OxnlvIIM6Y+qSK1yfbJpE2XnQ2fZ10o7dMkG3dqufuK7uQZoS45gzBcClaEozovip5SnXylCrysC62XFEsQ/Ou99+N1+u26Fl1qkZChVRnktHsHovjOyLCcnHELBiTei4QfvNtuHJcsL2cpJx/lYkjXNspPZJSrKpyF7ZGAtEYLCVasK258Li6LHLqeOAt+dmDUzBTRNpNKrSw+T4Y88i53L1CU5SOTRMHHG2rKu8XZqbYcD4ERy7I3Cn8f3dOOrMev6zgdnTKcJeSaT9rFbjPYGcE0MbyZ9M62XXxbgpHdxU/LAo3iqJiGnqcqBc8JbiT9+M/6zsRhDMuXazBMnT1dDjk/e8Xeslhy38TYSbhcySCCJhsVxEpLBrACzM4bx/u6e4qH3+1RU1i5kc2TKTL64ffjhCkponvrllFCZtcaWGwMlar3ZTID73pSXesw17A9SzBA6Y1hPL+mV7p/ligzLpQeA8BkoXeE= generated-by-azure"
+                                }
+                            ]
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "securityProfile": {
+                    "uefiSettings": {
+                        "secureBootEnabled": true,
+                        "vTpmEnabled": true
+                    },
+                    "securityType": "TrustedLaunch"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web11_onp_vm_gw653_name'))]",
+                            "properties": {
+                                "deleteOption": "Detach"
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        },
+        {
+            "type": "microsoft.devtestlab/schedules",
+            "apiVersion": "2018-09-15",
+            "name": "[parameters('schedules_shutdown_computevm_web11_onp_vm_ap_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_web11_onp_vm_ap_name'))]"
+            ],
+            "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "1900"
+                },
+                "timeZoneId": "Korea Standard Time",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": 30,
+                    "webhookUrl": "yourWebhookUrl",
+                    "emailRecipient": "yourEmail@example.com",
+                    "notificationLocale": "en"
+                },
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_web11_onp_vm_ap_name'))]"
+            }
+        },
+        {
+            "type": "microsoft.devtestlab/schedules",
+            "apiVersion": "2018-09-15",
+            "name": "[parameters('schedules_shutdown_computevm_web11_onp_vm_db_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_web11_onp_vm_db_name'))]"
+            ],
+            "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "1900"
+                },
+                "timeZoneId": "Korea Standard Time",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": 30,
+                    "webhookUrl": "yourWebhookUrl",
+                    "emailRecipient": "yourEmail@example.com",
+                    "notificationLocale": "en"
+                },
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_web11_onp_vm_db_name'))]"
+            }
+        },
+        {
+            "type": "microsoft.devtestlab/schedules",
+            "apiVersion": "2018-09-15",
+            "name": "[parameters('schedules_shutdown_computevm_web11_onp_vm_gw_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_web11_onp_vm_gw_name'))]"
+            ],
+            "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "1900"
+                },
+                "timeZoneId": "Korea Standard Time",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": 30,
+                    "webhookUrl": "yourWebhookUrl",
+                    "emailRecipient": "yourEmail@example.com",
+                    "notificationLocale": "en"
+                },
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_web11_onp_vm_gw_name'))]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'), '/AllowAnyCustom8080Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "8080",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 120,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'), '/AllowAnyCustom8080Inbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "8080",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 310,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'), '/AllowAnyHTTPInbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "80",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 330,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'), '/AllowAnyHTTPSInbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "443",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 320,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'), '/AllowAnyPostgreSQLInbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "5432",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 110,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'), '/AllowAnySSHInbound')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_web11_onp_vm_ap_nsg_name'), '/SSH')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_ap_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 300,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'), '/SSH')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 300,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('virtualNetworks_vnet_web11_onp_name'), '/sn-ap')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet_web11_onp_name'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "21.0.0.0/24"
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('virtualNetworks_vnet_web11_onp_name'), '/sn-db')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet_web11_onp_name'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "21.0.1.0/24"
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(parameters('virtualNetworks_vnet_web11_onp_name'), '/sn-gw')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_vnet_web11_onp_name'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "21.0.254.0/24"
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('networkInterfaces_web11_onp_vm_ap857_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_web11_onp_vm_ap_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web11_onp_name'), 'sn-ap')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_ap_nsg_name'))]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web11_onp_vm_ap857_name')), '/ipConfigurations/ipconfig1')]",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "privateIPAddress": "21.0.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_web11_onp_vm_ap_ip_name'))]",
+                                "properties": {
+                                    "deleteOption": "Detach"
+                                }
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web11_onp_name'), 'sn-ap')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "disableTcpStateTracking": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_ap_nsg_name'))]"
+                },
+                "nicType": "Standard",
+                "auxiliaryMode": "None",
+                "auxiliarySku": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('networkInterfaces_web11_onp_vm_db798_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_pip_vnet_web11_onp_koreacentral_sn_db_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web11_onp_name'), 'sn-db')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'))]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web11_onp_vm_db798_name')), '/ipConfigurations/ipconfig1')]",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "privateIPAddress": "21.0.1.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_pip_vnet_web11_onp_koreacentral_sn_db_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web11_onp_name'), 'sn-db')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "disableTcpStateTracking": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_db_nsg_name'))]"
+                },
+                "nicType": "Standard",
+                "auxiliaryMode": "None",
+                "auxiliarySku": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2024-05-01",
+            "name": "[parameters('networkInterfaces_web11_onp_vm_gw653_name')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_web11_onp_vm_gw_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web11_onp_name'), 'sn-gw')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'))]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web11_onp_vm_gw653_name')), '/ipConfigurations/ipconfig1')]",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "privateIPAddress": "21.0.254.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_web11_onp_vm_gw_ip_name'))]",
+                                "properties": {
+                                    "deleteOption": "Detach"
+                                }
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_vnet_web11_onp_name'), 'sn-gw')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "disableTcpStateTracking": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_web11_onp_vm_gw_nsg_name'))]"
+                },
+                "nicType": "Standard",
+                "auxiliaryMode": "None",
+                "auxiliarySku": "None"
+            }
+        }
+    ]
+}
