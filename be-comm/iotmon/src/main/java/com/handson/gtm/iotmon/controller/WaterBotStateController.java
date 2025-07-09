@@ -12,6 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 /**
  * WaterBotState 엔티티에 대한 RESTful API를 제공하는 컨트롤러.
  * 로봇 상태 정보를 생성, 조회, 업데이트, 삭제합니다.
@@ -21,6 +25,8 @@ import java.util.Optional;
 public class WaterBotStateController {
 
     private final WaterBotStateRepository waterBotStateRepository;
+    private static final Logger logger = LoggerFactory.getLogger(DeviceController.class);
+
 
     @Autowired // Spring이 WaterBotStateRepository의 인스턴스를 자동으로 주입하도록 합니다.
     public WaterBotStateController(WaterBotStateRepository waterBotStateRepository) {
@@ -61,6 +67,7 @@ public class WaterBotStateController {
     @PostMapping
     public ResponseEntity<WaterBotState> createOrUpdateWaterBotState(@RequestBody WaterBotState waterBotState) {
         // lastUpdated 필드를 현재 시간으로 자동 설정 (로봇 시뮬레이터에서 timestamp를 보내도 여기서 서버 시간으로 덮어씀)
+        logger.info("Received WaterBotState: {}", waterBotState);
         waterBotState.setLastUpdated(LocalDateTime.now());
         WaterBotState savedState = waterBotStateRepository.save(waterBotState);
         return new ResponseEntity<>(savedState, HttpStatus.CREATED); // 201 Created (신규 생성시) 또는 200 OK (업데이트시)

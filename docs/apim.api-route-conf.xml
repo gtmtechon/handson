@@ -1,0 +1,42 @@
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@(context.Request.OriginalUrl.Path.StartsWith("/api/devices"))">
+                <set-backend-service base-url="https://iotmon-comm-be.azurewebsites.net" />
+                <rewrite-uri template="/api/devices" />
+            </when>
+            <when condition="@(context.Request.OriginalUrl.Path.StartsWith("/robots"))">
+                <set-backend-service base-url="https://azfa-iotmon-device.azurewebsites.net/api/robots/status" />
+                <rewrite-uri template="/api/robots/status" />
+            </when>
+        </choose>
+        <cors>
+            <allowed-origins>
+                <origin>https://web07fe-ecdnd6beaafuehb8.koreacentral-01.azurewebsites.net</origin>
+                <origin>http://localhost:3000</origin>
+            </allowed-origins>
+            <allowed-methods>
+                <method>GET</method>
+                <method>POST</method>
+                <method>PUT</method>
+                <method>DELETE</method>
+            </allowed-methods>
+            <allowed-headers>
+                <header>*</header>
+            </allowed-headers>
+            <expose-headers>
+                <header>*</header>
+            </expose-headers>
+        </cors>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
