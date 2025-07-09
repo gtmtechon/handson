@@ -1,0 +1,72 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "users_1_lastName": {
+            "value": null
+        },
+        "sites_web07fe_name": {
+            "value": null
+        },
+        "sites_azfa_robot_sim_name": {
+            "value": null
+        },
+        "serverfarms_asp_web07_name": {
+            "value": null
+        },
+        "serverfarms_asp_web07a_name": {
+            "value": null
+        },
+        "sites_azfa_iotmon_device_name": {
+            "value": null
+        },
+        "serverfarms_asp_web07_prm_name": {
+            "value": null
+        },
+        "service_apim_web07_name": {
+            "value": null
+        },
+        "components_azfa_robot_sim_name": {
+            "value": null
+        },
+        "storageAccounts_rghandsonweb07prm_name": {
+            "value": null
+        },
+        "storageAccounts_rghandsonweb078731_name": {
+            "value": null
+        },
+        "components_azfa_robot_sim202507081512_name": {
+            "value": null
+        },
+        "userAssignedIdentities_web07fe_id_9163_name": {
+            "value": null
+        },
+        "userAssignedIdentities_azfa_robot_sim_id_a009_name": {
+            "value": null
+        },
+        "userAssignedIdentities_azfa_robot_sim_id_ac83_name": {
+            "value": null
+        },
+        "userAssignedIdentities_azfa_iotmon_devi_id_bcb6_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___azfa_robot_sim_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___azfa_robot_sim202507081512_name": {
+            "value": null
+        },
+        "actiongroups_application_insights_smart_detection_externalid": {
+            "value": null
+        },
+        "components_gtmtech202504240457_externalid": {
+            "value": null
+        },
+        "workspaces_loganalws_handson_comm_externalid": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_c40ed92f_a745_4ad8_ba89_cfe39134ad4e_SE_externalid": {
+            "value": null
+        }
+    }
+}
