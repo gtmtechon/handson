@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_web06fe_name": {
+            "value": null
+        },
+        "Redis_web06imdb_name": {
+            "value": null
+        },
+        "userAssignedIdentities_web06fe_id_af2a_name": {
+            "value": null
+        },
+        "serverfarms_ASP_gtmtecharchirgwordprocess_ad9a_externalid": {
+            "value": null
+        }
+    }
+}
