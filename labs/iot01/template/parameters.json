@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "IotHubs_iothub_iot01_connectionString": {
+            "value": null
+        },
+        "IotHubs_iothub_iot01_containerName": {
+            "value": null
+        },
+        "IotHubs_iothub_iot01_name": {
+            "value": null
+        },
+        "Clusters_adec_limo_iotmon_name": {
+            "value": null
+        },
+        "namespaces_limo_evthub_sc01_name": {
+            "value": null
+        },
+        "streamingjobs_toAzfa1_name": {
+            "value": null
+        },
+        "components_azfa_iot_sensor_evthub_name": {
+            "value": null
+        },
+        "storageAccounts_rghandsoniot018ca6_name": {
+            "value": null
+        },
+        "storageAccounts_rghandsoniot01bc44_name": {
+            "value": null
+        },
+        "streamingjobs_saj_iot_robot_data_name": {
+            "value": null
+        },
+        "userAssignedIdentities_azfa_iot_evhub_t_id_9864_name": {
+            "value": null
+        },
+        "userAssignedIdentities_azfa_iot_sensor__id_a3bf_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___azfa_iot_evhub_trg_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___azfa_iot_sensor_evthub_name": {
+            "value": null
+        },
+        "components_azfa_iot_evhub_trg_externalid": {
+            "value": null
+        },
+        "actiongroups_application_insights_smart_detection_externalid": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_c40ed92f_a745_4ad8_ba89_cfe39134ad4e_SE_externalid": {
+            "value": null
+        }
+    }
+}
