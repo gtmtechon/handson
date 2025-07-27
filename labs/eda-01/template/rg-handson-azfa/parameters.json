@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "serverfarms_asp_limo_azfa_name": {
+            "value": null
+        },
+        "sites_limo_azfa_waterbot_helper_name": {
+            "value": null
+        },
+        "storageAccounts_rghandsonazfa9115_name": {
+            "value": null
+        },
+        "components_limo_azfa_waterbot_helper_name": {
+            "value": null
+        },
+        "userAssignedIdentities_limo_azfa_waterb_id_b58a_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___limo_azfa_waterbot_helper_name": {
+            "value": null
+        },
+        "actiongroups_application_insights_smart_detection_externalid": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_c40ed92f_a745_4ad8_ba89_cfe39134ad4e_SE_externalid": {
+            "value": null
+        }
+    }
+}

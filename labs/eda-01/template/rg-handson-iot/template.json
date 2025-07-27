@@ -1,0 +1,256 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "IotHubs_limo_iothub_waterbot_connectionString": {
+            "type": "SecureString"
+        },
+        "IotHubs_limo_iothub_waterbot_containerName": {
+            "type": "SecureString"
+        },
+        "namespaces_limo_evthub_name": {
+            "defaultValue": "limo-evthub",
+            "type": "String"
+        },
+        "IotHubs_limo_iothub_waterbot_name": {
+            "defaultValue": "limo-iothub-waterbot",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Devices/IotHubs",
+            "apiVersion": "2023-06-30",
+            "name": "[parameters('IotHubs_limo_iothub_waterbot_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "ipFilterRules": [],
+                "eventHubEndpoints": {
+                    "events": {
+                        "retentionTimeInDays": 1,
+                        "partitionCount": 4
+                    }
+                },
+                "routing": {
+                    "endpoints": {
+                        "serviceBusQueues": [
+                            {
+                                "connectionString": "[concat('Endpoint=sb://limosvcbus.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_', parameters('IotHubs_limo_iothub_waterbot_name'), ';SharedAccessKey=****;EntityPath=robot-battery-alert-queue')]",
+                                "authenticationType": "keyBased",
+                                "name": "robot-battery-alert-queue",
+                                "id": "06371f81-9e0b-46ef-9f88-0ae7d1beaa5a",
+                                "subscriptionId": "c40ed92f-a745-4ad8-ba89-cfe39134ad4e",
+                                "resourceGroup": "rg-handson-msgsvc"
+                            }
+                        ],
+                        "serviceBusTopics": [],
+                        "eventHubs": [],
+                        "storageContainers": [
+                            {
+                                "connectionString": "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=stalimoapps;AccountKey=****",
+                                "containerName": "water-bot-msg-json",
+                                "fileNameFormat": "{iothub}/{partition}/{YYYY}/{MM}/{DD}/{HH}/{mm}.json",
+                                "batchFrequencyInSeconds": 100,
+                                "maxChunkSizeInBytes": 104857600,
+                                "encoding": "JSON",
+                                "authenticationType": "keyBased",
+                                "name": "water-bot-msg-json",
+                                "id": "a86ecf24-b688-4be5-89aa-72124c4482c4",
+                                "subscriptionId": "c40ed92f-a745-4ad8-ba89-cfe39134ad4e",
+                                "resourceGroup": "rg-handson-appsvc"
+                            }
+                        ],
+                        "cosmosDBSqlContainers": []
+                    },
+                    "routes": [
+                        {
+                            "name": "save-all-json",
+                            "source": "DeviceMessages",
+                            "condition": "true",
+                            "endpointNames": [
+                                "water-bot-msg-json"
+                            ],
+                            "isEnabled": false
+                        },
+                        {
+                            "name": "low-battery-alert",
+                            "source": "DeviceMessages",
+                            "condition": "$body.batteryLevel <20",
+                            "endpointNames": [
+                                "robot-battery-alert-queue"
+                            ],
+                            "isEnabled": true
+                        }
+                    ],
+                    "fallbackRoute": {
+                        "name": "$fallback",
+                        "source": "DeviceMessages",
+                        "condition": "true",
+                        "endpointNames": [
+                            "events"
+                        ],
+                        "isEnabled": true
+                    }
+                },
+                "storageEndpoints": {
+                    "$default": {
+                        "sasTtlAsIso8601": "PT1H",
+                        "connectionString": "[parameters('IotHubs_limo_iothub_waterbot_connectionString')]",
+                        "containerName": "[parameters('IotHubs_limo_iothub_waterbot_containerName')]"
+                    }
+                },
+                "messagingEndpoints": {
+                    "fileNotifications": {
+                        "lockDurationAsIso8601": "PT1M",
+                        "ttlAsIso8601": "PT1H",
+                        "maxDeliveryCount": 10
+                    }
+                },
+                "enableFileUploadNotifications": false,
+                "cloudToDevice": {
+                    "maxDeliveryCount": 10,
+                    "defaultTtlAsIso8601": "PT1H",
+                    "feedback": {
+                        "lockDurationAsIso8601": "PT1M",
+                        "ttlAsIso8601": "PT1H",
+                        "maxDeliveryCount": 10
+                    }
+                },
+                "features": "RootCertificateV2",
+                "minTlsVersion": "1.2",
+                "disableLocalAuth": false,
+                "allowedFqdnList": [],
+                "enableDataResidency": false
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[parameters('namespaces_limo_evthub_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "properties": {
+                "geoDataReplication": {
+                    "maxReplicationLagDurationInSeconds": 0,
+                    "locations": [
+                        {
+                            "locationName": "koreacentral",
+                            "roleType": "Primary"
+                        }
+                    ]
+                },
+                "minimumTlsVersion": "1.2",
+                "publicNetworkAccess": "Enabled",
+                "disableLocalAuth": false,
+                "zoneRedundant": true,
+                "isAutoInflateEnabled": false,
+                "maximumThroughputUnits": 0,
+                "kafkaEnabled": true
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/authorizationrules",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('namespaces_limo_evthub_name'), '/RootManageSharedAccessKey')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_limo_evthub_name'))]"
+            ],
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Manage",
+                    "Send"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('namespaces_limo_evthub_name'), '/limo-iot-evt-sensor')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_limo_evthub_name'))]"
+            ],
+            "properties": {
+                "messageTimestampDescription": {
+                    "timestampType": "LogAppend"
+                },
+                "retentionDescription": {
+                    "cleanupPolicy": "Delete",
+                    "retentionTimeInHours": 2
+                },
+                "messageRetentionInDays": 1,
+                "partitionCount": 4,
+                "status": "Active"
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/networkrulesets",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('namespaces_limo_evthub_name'), '/default')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_limo_evthub_name'))]"
+            ],
+            "properties": {
+                "publicNetworkAccess": "Enabled",
+                "defaultAction": "Allow",
+                "virtualNetworkRules": [],
+                "ipRules": [],
+                "trustedServiceAccessEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationrules",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('namespaces_limo_evthub_name'), '/limo-iot-evt-sensor/azevthub-iot-policy')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('namespaces_limo_evthub_name'), 'limo-iot-evt-sensor')]",
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_limo_evthub_name'))]"
+            ],
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Send"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('namespaces_limo_evthub_name'), '/limo-iot-evt-sensor/$Default')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('namespaces_limo_evthub_name'), 'limo-iot-evt-sensor')]",
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_limo_evthub_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
+            "apiVersion": "2024-05-01-preview",
+            "name": "[concat(parameters('namespaces_limo_evthub_name'), '/limo-iot-evt-sensor/sensor-be')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('namespaces_limo_evthub_name'), 'limo-iot-evt-sensor')]",
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_limo_evthub_name'))]"
+            ],
+            "properties": {}
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "IotHubs_limo_iothub_waterbot_connectionString": {
+            "value": null
+        },
+        "IotHubs_limo_iothub_waterbot_containerName": {
+            "value": null
+        },
+        "namespaces_limo_evthub_name": {
+            "value": null
+        },
+        "IotHubs_limo_iothub_waterbot_name": {
+            "value": null
+        }
+    }
+}

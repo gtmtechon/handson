@@ -1,0 +1,103 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "namespaces_limosvcbus_name": {
+            "defaultValue": "limosvcbus",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ServiceBus/namespaces",
+            "apiVersion": "2024-01-01",
+            "name": "[parameters('namespaces_limosvcbus_name')]",
+            "location": "koreacentral",
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard"
+            },
+            "properties": {
+                "premiumMessagingPartitions": 0,
+                "minimumTlsVersion": "1.2",
+                "publicNetworkAccess": "Enabled",
+                "disableLocalAuth": false,
+                "zoneRedundant": true
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/authorizationrules",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_limosvcbus_name'), '/RootManageSharedAccessKey')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_limosvcbus_name'))]"
+            ],
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Manage",
+                    "Send"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/networkrulesets",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_limosvcbus_name'), '/default')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_limosvcbus_name'))]"
+            ],
+            "properties": {
+                "publicNetworkAccess": "Enabled",
+                "defaultAction": "Allow",
+                "virtualNetworkRules": [],
+                "ipRules": [],
+                "trustedServiceAccessEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/queues",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_limosvcbus_name'), '/robot-battery-alert-queue')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_limosvcbus_name'))]"
+            ],
+            "properties": {
+                "maxMessageSizeInKilobytes": 256,
+                "lockDuration": "PT1M",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "P14D",
+                "deadLetteringOnMessageExpiration": true,
+                "enableBatchedOperations": true,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "maxDeliveryCount": 10,
+                "status": "Active",
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/queues/authorizationrules",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('namespaces_limosvcbus_name'), '/robot-battery-alert-queue/iothubroutes_limo-iothub-waterbot')]",
+            "location": "koreacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces/queues', parameters('namespaces_limosvcbus_name'), 'robot-battery-alert-queue')]",
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_limosvcbus_name'))]"
+            ],
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Send"
+                ]
+            }
+        }
+    ]
+}
