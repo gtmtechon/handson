@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_eda02be_name": {
+            "value": null
+        },
+        "sites_eda02fe_name": {
+            "value": null
+        },
+        "serverfarms_asp_eda02_name": {
+            "value": null
+        },
+        "sites_limo_azfa_eda02_name": {
+            "value": null
+        },
+        "components_eda02be_name": {
+            "value": null
+        },
+        "components_eda02fe_name": {
+            "value": null
+        },
+        "serverfarms_asp_eda02_web_name": {
+            "value": null
+        },
+        "databaseAccounts_gtmtech_name": {
+            "value": null
+        },
+        "components_limo_azfa_eda02_name": {
+            "value": null
+        },
+        "storageAccounts_rghandsoneda029d42_name": {
+            "value": null
+        },
+        "userAssignedIdentities_oidc_msi_886f_name": {
+            "value": null
+        },
+        "userAssignedIdentities_oidc_msi_8fe4_name": {
+            "value": null
+        },
+        "userAssignedIdentities_oidc_msi_b16e_name": {
+            "value": null
+        },
+        "userAssignedIdentities_limo_azfa_eda02_id_9d1d_name": {
+            "value": null
+        },
+        "userAssignedIdentities_limo_azfa_eda02_id_ad34_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___eda02be_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___eda02fe_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___limo_azfa_eda02_name": {
+            "value": null
+        },
+        "actiongroups_application_insights_smart_detection_externalid": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_c40ed92f_a745_4ad8_ba89_cfe39134ad4e_SE_externalid": {
+            "value": null
+        },
+        "serverfarms_asp_azfa_iot01_externalid": {
+            "value": null
+        }
+    }
+}
