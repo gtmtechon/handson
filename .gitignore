@@ -1,0 +1,16 @@
+# ignore Python cache
+__pycache__/
+*.pyc
+
+# ignore node modules if present
+node_modules/
+
+# ignore IDE files
+.vscode/
+*.swp
+
+# logs
+*.log
+
+# others
+.env
