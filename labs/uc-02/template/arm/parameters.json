@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_gov_chatbot_api_v1d_name": {
+            "value": null
+        },
+        "serverfarms_gov_chatbot_plan_name": {
+            "value": null
+        },
+        "components_gov_chatbot_api_v1d_name": {
+            "value": null
+        },
+        "storageAccounts_stgovhandbookv1d_name": {
+            "value": null
+        },
+        "searchServices_srch_gov_expert_v1d_name": {
+            "value": null
+        },
+        "accounts_aoai_gov_expert_v1d_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___gov_chatbot_api_v1d_name": {
+            "value": null
+        },
+        "actiongroups_application_insights_smart_detection_externalid": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_60d89085_249d_446b_a64e_fa7fb407f65e_SE_externalid": {
+            "value": null
+        }
+    }
+}
