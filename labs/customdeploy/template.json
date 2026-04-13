@@ -131,8 +131,7 @@
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
-                            "storageAccountType": "StandardSSD_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_vm_lnx_custom_deploy_test_name'), '_OsDisk_1_a542df302ad5489cbdd0b56601e4158b'))]"
+                            "storageAccountType": "StandardSSD_LRS"
                         },
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
